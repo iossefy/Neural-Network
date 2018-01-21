@@ -2,6 +2,7 @@
 import math
 import random
 
+
 class Matrix:
     def __init__(self, rows, cols):
         # The user will input the number
@@ -59,11 +60,26 @@ class Matrix:
                 val = self.data[i][j]
                 self.data[i][j] = func(val)
 
+    @staticmethod
+    def Smap(matrix, func):  # Static version of map function
+        result = Matrix(matrix.rows, matrix.cols)
+        for i in range(matrix.rows):
+            for j in range(matrix.cols):
+                val = matrix.data[i][j]
+                result.data[i][j] = func(val)
+        return result
+
     def multiply(self, n):
-        # Scalar product
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.data[i][j] *= n
+        if isinstance(n, Matrix):
+            # Hadamard product
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    self.data[i][j] *= n.data[i][j]
+        else:
+            # Scalar product
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    self.data[i][j] *= n
 
     @staticmethod
     def fromArray(arr):
@@ -93,3 +109,7 @@ class Matrix:
         for i in range(self.rows):
             for j in range(self.cols):
                 self.data[i][j] = random.random() * 2 - 1
+
+    @staticmethod
+    def log(matrix):
+        print(matrix.data)
