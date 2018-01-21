@@ -35,5 +35,19 @@ class NeuralNetwork:
         # Sending it back to the caller!
         return output.toArray()
 
-    def train(self, inputs, answer):
-        pass
+    def train(self, inputs, targets):
+        outputs = self.feedforward(inputs)
+        # Covert array to matrix object
+        outputs = Matrix.fromArray(outputs)
+        targets = Matrix.fromArray(targets)
+        # ERROR = TARGETS - OUTPUTS
+        output_errors = Matrix.subtract(targets, outputs)
+
+        # Calculate hidden layer errors
+        who_t = Matrix.transpose(self.weights_ho)
+        hidden_erros = Matrix.multiplyMatrix(who_t, output_errors)
+
+        # print("Hidden errors: {0}".format(str(hidden_erros.data)))
+        # print("Output errors: {0}".format(str(output_errors.data)))
+        # print("Targets: {0}".format(str(targets.data)))
+        # print("Outputs: {0}".format(str(outputs.data)))
