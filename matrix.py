@@ -56,6 +56,20 @@ class Matrix:
             for j in range(self.cols):
                 self.data[i][j] *= n
 
+    @staticmethod
+    def fromArray(arr):
+        m = Matrix(len(arr), 1)
+        for i in range(arr.__len__()):
+            m.data[i][0] = arr[i]
+        return m
+
+    def toArray(self):
+        arr = []
+        for i in range(self.rows):
+            for j in range(self.cols):
+                arr.append(self.data[i][j])
+        return arr
+
     def transpose(self):
         # This makes the columns of the new matrix the rows of the original
         result = Matrix(self.cols, self.rows)
@@ -68,4 +82,4 @@ class Matrix:
         # Randomize all the matrix elements
         for i in range(self.rows):
             for j in range(self.cols):
-                self.data[i][j] = math.floor(random.random() * 10)
+                self.data[i][j] = random.random() * 2 - 1
