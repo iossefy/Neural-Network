@@ -47,9 +47,10 @@ class NeuralNetwork:
         return output.toArray()
 
     def train(self, inputs, targets):
-
         # Generate hidden outputs
-        inputs = Matrix.fromArray(inputArray)
+        outputs = self.feedforward(inputs)
+
+        inputs = Matrix.fromArray(inputs)
         hidden = Matrix.multiplyMatrix(self.weights_ih, inputs)
         hidden.add(self.bias_h)
         # Activation function
@@ -58,21 +59,22 @@ class NeuralNetwork:
         outputs = Matrix.multiplyMatrix(self.weights_ho, hidden)
         outputs.add(self.bias_o)
         outputs.map(sigmoid)
-
-        outputs = self.feedforward(inputs)
+        # outputs = self.feedforward(inputs)
         # Covert array to matrix object
         targets = Matrix.fromArray(targets)
+
         learning_rate = 0.1
 
         # ERROR = TARGETS - OUTPUTS
         output_errors = Matrix.subtract(targets, outputs)
         # Change hidden to output weights gredient descent
         d_outputs = Matrix.Smap(outputs, alreadySigmoided)
+        # multiply things with other things
         d_outputs.multiply(output_errors)
         d_outputs.multiply(learning_rate)
         hidden_T = Matrix.transpose(hidden)
         delta_weights = Matrix.multiplyMatrix(d_outputs, hidden_T)
-        delta_weights.log()
+        Matrix.log(delta_weights)
         self.weights_ho.add(delta_weights)
         # Calculate hidden layer errors
         who_t = Matrix.transpose(self.weights_ho)
