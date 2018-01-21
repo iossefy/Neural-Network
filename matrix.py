@@ -17,6 +17,15 @@ class Matrix:
             for j in range(self.cols):
                 self.data[i].append(0)
 
+    @staticmethod
+    def subtract(a, b):
+        # Return a new matrix a-b
+        result = Matrix(a.rows, a.cols)
+        for i in range(result.rows):
+            for j in range(result.cols):
+                result.data[i][j] = (a.data[i][j] - b.data[i][j])
+        return result
+
     def add(self, n):
         if isinstance(n, Matrix):
             for i in range(self.rows):
@@ -70,12 +79,13 @@ class Matrix:
                 arr.append(self.data[i][j])
         return arr
 
-    def transpose(self):
+    @staticmethod
+    def transpose(matrix):
         # This makes the columns of the new matrix the rows of the original
-        result = Matrix(self.cols, self.rows)
-        for i in range(self.rows):
-            for j in range(self.cols):
-                result.data[j][i] = self.data[i][j]
+        result = Matrix(matrix.cols, matrix.rows)
+        for i in range(matrix.rows):
+            for j in range(matrix.cols):
+                result.data[j][i] = matrix.data[i][j]
         return result
 
     def randomize(self):
