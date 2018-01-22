@@ -17,10 +17,11 @@ def alreadySigmoided(x):
 
 
 class NeuralNetwork:
-    def __init__(self, input_nodes, hidden_nodes, output_nodes):
+    def __init__(self, input_nodes, hidden_nodes, output_nodes, learning_rate=0.1):
         self.input_nodes = input_nodes
         self.hidden_nodes = hidden_nodes
         self.output_nodes = output_nodes
+        self.lr = learning_rate
 
         self.weights_ih = Matrix(self.hidden_nodes, self.input_nodes)
         self.weights_ho = Matrix(self.output_nodes, self.hidden_nodes)
@@ -63,15 +64,13 @@ class NeuralNetwork:
         # Covert array to matrix object
         targets = Matrix.fromArray(targets)
 
-        learning_rate = 0.1
-
         # ERROR = TARGETS - OUTPUTS
         output_errors = Matrix.subtract(targets, outputs)
         # Change hidden to output weights gredient descent
         d_outputs = Matrix.Smap(outputs, alreadySigmoided)
         # multiply things with other things
         d_outputs.multiply(output_errors)
-        d_outputs.multiply(learning_rate)
+        d_outputs.multiply(self.lr)
         hidden_T = Matrix.transpose(hidden)
         delta_weights = Matrix.multiplyMatrix(d_outputs, hidden_T)
         Matrix.log(delta_weights)
