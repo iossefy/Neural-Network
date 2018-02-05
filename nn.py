@@ -7,13 +7,8 @@ def sigmoid(x):
     return 1 / (1 + math.exp(-x))
 
 
-def dsigmoid(x):
-    y = sigmoid(x)
+def dsigmoid(y):
     return y * (1 - y)
-
-
-def alreadySigmoided(x):
-    return x * (1 - x)
 
 
 class NeuralNetwork:
@@ -21,7 +16,7 @@ class NeuralNetwork:
         self.input_nodes = input_nodes
         self.hidden_nodes = hidden_nodes
         self.output_nodes = output_nodes
-        self.lr = learning_rate
+        self.learning_rate = learning_rate
 
         self.weights_ih = Matrix(self.hidden_nodes, self.input_nodes)
         self.weights_ho = Matrix(self.output_nodes, self.hidden_nodes)
@@ -33,9 +28,9 @@ class NeuralNetwork:
         self.bias_h.randomize()
         self.bias_o.randomize()
 
-    def feedforward(self, inputArray):
+    def feedforward(self, inputs_array):
         # Generate hidden outputs
-        inputs = Matrix.fromArray(inputArray)
+        inputs = Matrix.fromArray(inputs_array)
         hidden = Matrix.multiplyMatrix(self.weights_ih, inputs)
         hidden.add(self.bias_h)
         # Activation function
@@ -47,11 +42,9 @@ class NeuralNetwork:
         # Sending it back to the caller!
         return output.toArray()
 
-    def train(self, inputs, targets):
+    def train(self, input_array, target_array):
         # Generate hidden outputs
-        outputs = self.feedforward(inputs)
-
-        inputs = Matrix.fromArray(inputs)
+        inputs = Matrix.fromArray(input_array)
         hidden = Matrix.multiplyMatrix(self.weights_ih, inputs)
         hidden.add(self.bias_h)
         # Activation function
@@ -60,26 +53,40 @@ class NeuralNetwork:
         outputs = Matrix.multiplyMatrix(self.weights_ho, hidden)
         outputs.add(self.bias_o)
         outputs.map(sigmoid)
-        # outputs = self.feedforward(inputs)
-        # Covert array to matrix object
-        targets = Matrix.fromArray(targets)
 
+        # Convert array to matrix object
+        targets = Matrix.fromArray(target_array)
+
+        # Calculate the error
         # ERROR = TARGETS - OUTPUTS
         output_errors = Matrix.subtract(targets, outputs)
-        # Change hidden to output weights gredient descent
-        d_outputs = Matrix.Smap(outputs, alreadySigmoided)
-        # multiply things with other things
-        d_outputs.multiply(output_errors)
-        d_outputs.multiply(self.lr)
-        hidden_T = Matrix.transpose(hidden)
-        delta_weights = Matrix.multiplyMatrix(d_outputs, hidden_T)
-        Matrix.log(delta_weights)
-        self.weights_ho.add(delta_weights)
-        # Calculate hidden layer errors
-        who_t = Matrix.transpose(self.weights_ho)
-        hidden_erros = Matrix.multiplyMatrix(who_t, output_errors)
 
-        # print("Hidden errors: {0}".format(str(hidden_erros.data)))
-        # print("Output errors: {0}".format(str(output_errors.data)))
-        # print("Targets: {0}".format(str(targets.data)))
-        # print("Outputs: {0}".format(str(outputs.data)))
+        # Calculate gradient
+        gradients = Matrix.Smap(outputs, dsigmoid)
+        gradients.multiply(output_errors)
+        gradients.multiply(self.learning_rate)
+
+        # Calculate deltas
+        hidden_T = Matrix.transpose(hidden)
+        weights_ho_deltas = Matrix.multiplyMatrix(gradients, hidden_T)
+
+        # Adjust the weights by deltas
+        self.weights_ho.add(weights_ho_deltas)
+        # Adjust the bias by its deltas (gradients)
+        self.bias_o.add(gradients)
+
+
+        # Calculate the hidden layer errors
+        who_t = Matrix.transpose(self.weights_ho)
+        hidden_errors = Matrix.multiplyMatrix(who_t, outputs)
+
+        # Calculate hidden gradient
+        hidden_gradient = Matrix.Smap(hidden, dsigmoid)
+        hidden_gradient.multiply(hidden_errors)
+        hidden_gradient.multiply(self.learning_rate)
+
+        # Calculate input->hidden deltas
+        inputs_T = Matrix.transpose(inputs)
+        weight_ih_deltas = Matrix.multiplyMatrix(hidden_gradient, inputs_T)
+        self.weights_ih.add(weight_ih_deltas)
+        self.bias_h.add(hidden_gradient)
