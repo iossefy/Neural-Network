@@ -110,6 +110,5 @@ class Matrix:
             for j in range(self.cols):
                 self.data[i][j] = random.random() * 2 - 1
 
-    @staticmethod
-    def log(matrix):
-        print(matrix.data)
+    def log(self):
+        print(self.data)
