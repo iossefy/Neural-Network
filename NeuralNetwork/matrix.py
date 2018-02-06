@@ -104,11 +104,16 @@ class Matrix:
                 result.data[j][i] = matrix.data[i][j]
         return result
 
-    def randomize(self):
+    def randomize(self, dtype=float):
         # Randomize all the matrix elements
         for i in range(self.rows):
             for j in range(self.cols):
-                self.data[i][j] = random.random() * 2 - 1
+                if dtype == float:
+                    # Return a float value 0.1 and 0.9
+                    self.data[i][j] = random.random() * 2 - 1
+                elif dtype == int:
+                    # Return a int value between 0 and 10
+                    self.data[i][j] = math.floor(random.random() * 10)
 
     def log(self):
         print(self.data)
