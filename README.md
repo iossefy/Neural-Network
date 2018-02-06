@@ -45,6 +45,56 @@ i am just creating my first neural network library
 `train`: takes 2 param - train(input_array, target_array) - train the Neural Network
 
 # Code Examples
+
+###### Matrix
+matrix is a numpy like library
+```python
+from NeuralNetwork.matrix import Matrix
+# create instance of matrix with 2 rows and 3 columns
+m1 = Matrix(2, 3)
+
+# Show Data
+print(m1.data)
+# [[0, 0, 0], [0, 0, 0]]
+
+# Randomize values of m1 (Matrix)
+m1.randomize(dtype=float)
+print(m1.data)
+# [[-0.26396268483049146, 0.3837936231559904, -0.9863464021672874], [-0.6479179674474989, 0.26713230080347317, 0.061410519618629644]] of course your answer will vary
+m1.randomize(dtype=int)
+print(m1.data)
+# [[6, 5, 9], [2, 4, 7]] of course your answer will vary
+# Change rows and cols manually
+m1.data[0][1] = 0
+print(m1.data)
+# [[6, 0, 9], [2, 4, 7]]
+```
+
+Matrix Methods
+
+```python
+from NeuralNetwork.matrix import Matrix
+# create 2 matrix object
+m1 = Matrix(2, 3)
+m2 = Matrix(3, 2)
+# Randomize values
+m1.randomize(dtype=int)
+m2.randomize(dtype=int)
+print(m1.data)
+# [[8, 3, 9], [7, 6, 6]]
+print(m2.data)
+# [[2, 8], [6, 2], [1, 0]]
+# Transpose
+m3 = Matrix.transpose(m2)
+print(m3.data)
+# [[2, 6, 1], [8, 2, 0]]
+# Matrix multiplication
+m4 = Matrix.multiplyMatrix(m1, m2)
+print(m4.data)
+# [[43, 70], [56, 68]]
+```
+
+###### Neural Network
 ```python
 from NeuralNetwork.nn import NeuralNetwork
 nn = NeuralNetwork(2, 2, 1, learning_rate=0.1)
