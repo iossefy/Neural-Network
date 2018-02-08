@@ -42,6 +42,9 @@ class NeuralNetwork:
         # Sending it back to the caller!
         return output.toArray()
 
+    def setLearningRate(self, learning_rate):
+        self.learning_rate = learning_rate
+
     def train(self, input_array, target_array):
         # Generate hidden outputs
         inputs = Matrix.fromArray(input_array)
@@ -74,7 +77,6 @@ class NeuralNetwork:
         self.weights_ho.add(weights_ho_deltas)
         # Adjust the bias by its deltas (gradients)
         self.bias_o.add(gradients)
-
 
         # Calculate the hidden layer errors
         who_t = Matrix.transpose(self.weights_ho)
