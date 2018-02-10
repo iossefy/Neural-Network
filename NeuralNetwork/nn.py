@@ -43,7 +43,12 @@ class NeuralNetwork:
         return output.toArray()
 
     def setLearningRate(self, learning_rate):
-        self.learning_rate = learning_rate
+        minimum = 0.1
+        maximum = 1.0
+        if isinstance(learning_rate, float) and learning_rate > minimum and learning_rate < maximum:
+            self.learning_rate = learning_rate
+        else:
+            raise ValueError("Learning rate must be float and smaller than 1.0 and bigger that 0.1")
 
     def train(self, input_array, target_array):
         # Generate hidden outputs
