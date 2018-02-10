@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from .matrix import Matrix
+try:
+    from .matrix import Matrix
+except ImportError as e:
+    from matrix import Matrix
+
 import math
 
 
