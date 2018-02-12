@@ -7,20 +7,29 @@ except ImportError as e:
 import math
 
 
-def sigmoid(x):
-    return 1 / (1 + math.exp(-x))
+class ActivationFunction(object):
+    def __init__(self, func, dfunc):
+        self.func = func
+        self.dfunc = dfunc
+
+tanh = ActivationFunction(
+    lambda x: math.tanh(x),
+    lambda y: 1 - (y * y)
+)
 
 
-def dsigmoid(y):
-    return y * (1 - y)
-
+sigmoid = ActivationFunction(
+    lambda x: 1 / (1 + math.exp(-x)),
+    lambda y: y * (1 - y)
+)
 
 class NeuralNetwork:
-    def __init__(self, input_nodes, hidden_nodes, output_nodes, learning_rate=0.1):
+    def __init__(self, input_nodes, hidden_nodes, output_nodes, learning_rate=0.1, activation_function=sigmoid):
         self.input_nodes = input_nodes
         self.hidden_nodes = hidden_nodes
         self.output_nodes = output_nodes
         self.learning_rate = learning_rate
+        self.activation_function = activation_function
 
         self.weights_ih = Matrix(self.hidden_nodes, self.input_nodes)
         self.weights_ho = Matrix(self.output_nodes, self.hidden_nodes)
@@ -32,27 +41,33 @@ class NeuralNetwork:
         self.bias_h.randomize()
         self.bias_o.randomize()
 
-    def feedforward(self, inputs_array):
+        self.setLearningRate(self.learning_rate)
+        self.setActivationFunction(self.activation_function)
+
+    def predict(self, inputs_array):
         # Generate hidden outputs
         inputs = Matrix.fromArray(inputs_array)
         hidden = Matrix.multiplyMatrix(self.weights_ih, inputs)
         hidden.add(self.bias_h)
         # Activation function
-        hidden.map(sigmoid)
+        hidden.map(self.activation_function.func)
         # Generating the output's output!
         output = Matrix.multiplyMatrix(self.weights_ho, hidden)
         output.add(self.bias_o)
-        output.map(sigmoid)
+        output.map(self.activation_function.func)
         # Sending it back to the caller!
         return output.toArray()
 
     def setLearningRate(self, learning_rate):
-        minimum = 0.1
+        minimum = 0.000001
         maximum = 1.0
-        if isinstance(learning_rate, float) and learning_rate > minimum and learning_rate < maximum:
+        if isinstance(learning_rate, float) and learning_rate >= minimum and learning_rate <= maximum:
             self.learning_rate = learning_rate
         else:
-            raise ValueError("Learning rate must be float and smaller than 1.0 and bigger that 0.1")
+            raise ValueError("Learning rate must be float in range 1.0")
+
+    def setActivationFunction(self, func):
+        self.activation_function = func
 
     def train(self, input_array, target_array):
         # Generate hidden outputs
@@ -60,12 +75,11 @@ class NeuralNetwork:
         hidden = Matrix.multiplyMatrix(self.weights_ih, inputs)
         hidden.add(self.bias_h)
         # Activation function
-        hidden.map(sigmoid)
+        hidden.map(self.activation_function.func)
         # Generating the output's output!
         outputs = Matrix.multiplyMatrix(self.weights_ho, hidden)
         outputs.add(self.bias_o)
-        outputs.map(sigmoid)
-
+        outputs.map(self.activation_function.func)
         # Convert array to matrix object
         targets = Matrix.fromArray(target_array)
 
@@ -74,7 +88,7 @@ class NeuralNetwork:
         output_errors = Matrix.subtract(targets, outputs)
 
         # Calculate gradient
-        gradients = Matrix.Smap(outputs, dsigmoid)
+        gradients = Matrix.Smap(outputs, self.activation_function.dfunc)
         gradients.multiply(output_errors)
         gradients.multiply(self.learning_rate)
 
@@ -92,7 +106,7 @@ class NeuralNetwork:
         hidden_errors = Matrix.multiplyMatrix(who_t, outputs)
 
         # Calculate hidden gradient
-        hidden_gradient = Matrix.Smap(hidden, dsigmoid)
+        hidden_gradient = Matrix.Smap(hidden, self.activation_function.dfunc)
         hidden_gradient.multiply(hidden_errors)
         hidden_gradient.multiply(self.learning_rate)
 
@@ -100,4 +114,5 @@ class NeuralNetwork:
         inputs_T = Matrix.transpose(inputs)
         weight_ih_deltas = Matrix.multiplyMatrix(hidden_gradient, inputs_T)
         self.weights_ih.add(weight_ih_deltas)
+        # Adjust bias by its deltas
         self.bias_h.add(hidden_gradient)
