@@ -7,42 +7,28 @@ all is implemented manually
 i am just creating my first neural network library
 
 
-# Docs
+# Documentation
 
-#### classes
-`NeuralNetwork` takes 3 required params and one optional-  NeuralNetwork(int(input_nodes), int(hidden_nodes), int(output_nodes), learning_rate=.1)
+`NeuralNetwork` takes 3 required params and one optional-  NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate=0.1, activation_function=sigmoid)
 
-`Matrix` takes 2 required params - Matrix(int(rows), int(cols))
+* `NeuralNetwork` - The neural network class
+  * `predict(input_array)` - Returns the output of a neural network
+  * `train(input_array, target_array)` - Trains a neural network
+  * `setLearningRate(learning_rate)` - setting the learning rate
+  * `setActivationFunction(func)` - setting the activation function
 
-#### methods
-
-###### Matrix
-`subtract`: takes to param subtract(a, b) - subtract 2 Matrix object
-
-`add`: takes 1 param add(n) - if `n` is instance of matrix it returns Hadamard Product else returns scalar product
-
-`multiplyMatrix`: takes 2 params multiplyMatrix() - multiply 2 Matrix object
-
-`map`: takes 1 param - Apply a function to every element of Matrix object
-
-`Smap`: takes 2 params - Smap(a, b) static version of map method
-
-`multiply`: takes 1 param add(n) - if `n` is instance of matrix it returns Hadamard Product else returns scalar product
-
-`fromArray`: takes 1 param - convert array to Matrix object
-
-`toArray`: takes 1 param - convert object Matrix to array
-
-`transpose`: takes 1 param - This makes the columns of the new matrix the rows of the original
-
-`randomize`: randomize matrix object
-
-`log`: print the data of the givin matrix
-
-###### NeuralNetwork
-`feedforward`: takes 1 param - feedforward(input_array) - returns output in array
-
-`train`: takes 2 param - train(input_array, target_array) - train the Neural Network
+* `Matrix` - The matrix class
+  * `subtract(a, b)` - return a matrix result from subtracting 2 matrix objects
+  * `add(n)` - add return sum of 2 matrix objects
+  * `multiplyMatrix(a, b)` - return a matrix result from multiplying to matrix objects
+  * `map(func)` - Apply a function to every element of matrix
+  * `Smap(matrix, func)` - static version of map
+  * `multiply(n)` - result a Hadamard product or scalar product
+  * `fromArray(arr)` - convert array to matrix
+  * `toArray` - convert matrix to array
+  * `transpose(matrix)` - This makes the columns of the new matrix the rows of the original
+  * `randomize(dtype=float)` - randomize all matrix elements
+  * `log` - print matrix data
 
 # Code Examples
 
@@ -60,10 +46,10 @@ print(m1.data)
 # Randomize values of m1 (Matrix)
 m1.randomize(dtype=float)
 print(m1.data)
-# [[-0.26396268483049146, 0.3837936231559904, -0.9863464021672874], [-0.6479179674474989, 0.26713230080347317, 0.061410519618629644]] of course your answer will vary
+# [[-0.26396268483049146, 0.3837936231559904, -0.9863464021672874], [-0.6479179674474989, 0.26713230080347317, 0.061410519618629644]]
 m1.randomize(dtype=int)
 print(m1.data)
-# [[6, 5, 9], [2, 4, 7]] of course your answer will vary
+# [[6, 5, 9], [2, 4, 7]]
 # Change rows and cols manually
 m1.data[0][1] = 0
 print(m1.data)
@@ -99,7 +85,7 @@ print(m4.data)
 from NeuralNetwork.nn import NeuralNetwork
 nn = NeuralNetwork(2, 2, 1, learning_rate=0.1)
 inputs = [1, 0]
-output = nn.feedforward(inputs)
+output = nn.predict(inputs)
 print(output)
 ```
 
@@ -115,7 +101,7 @@ targets = [1]
 
 # Train the neural network
 nn.train(inputs, targets)
-outputs = nn.feedforward(inputs)
+outputs = nn.predict(inputs)
 print(outputs)
 # [0.30405332078202085] # it will show you something like that
 ```
@@ -149,12 +135,11 @@ training_data = [
 for i in range(1000):
     for data in range(len(training_data)):
         nn.train(training_data[data].get('inputs'), training_data[data].get('targets'))
-        print(training_data[data].get("inputs"), training_data[data].get('targets'))
 
-print(nn.feedforward([1, 0]))
-print(nn.feedforward([0, 1]))
-print(nn.feedforward([0, 0]))
-print(nn.feedforward([1, 1]))
+print(nn.predict([1, 0]))
+print(nn.predict([0, 1]))
+print(nn.predict([0, 0]))
+print(nn.predict([1, 1]))
 ```
 Now you can see the result
 
