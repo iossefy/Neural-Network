@@ -21,6 +21,10 @@ class Matrix:
     @staticmethod
     def subtract(a, b):
         # Return a new matrix a-b
+        if a.rows != b.rows or a.cols != b.cols:
+            print("Columns and Rows must match")
+            return
+
         result = Matrix(a.rows, a.cols)
         for i in range(result.rows):
             for j in range(result.cols):
@@ -29,6 +33,10 @@ class Matrix:
 
     def add(self, n):
         if isinstance(n, Matrix):
+            if self.rows != n.rows or self.cols != n.cols:
+                print("Columns and Rows must match")
+                return
+
             for i in range(self.rows):
                 for j in range(self.cols):
                     self.data[i][j] += n.data[i][j]
@@ -42,7 +50,7 @@ class Matrix:
     def multiplyMatrix(a, b):
         if a.cols != b.rows:
             print("Columns of A must match the rows of B")
-            return None
+            return
         result = Matrix(a.rows, b.cols)
         for i in range(result.rows):
             for j in range(result.cols):
