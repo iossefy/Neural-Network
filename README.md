@@ -9,8 +9,6 @@ i am just creating my first neural network library
 
 # Documentation
 
-`NeuralNetwork` takes 3 required params and one optional-  NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate=0.1, activation_function=sigmoid)
-
 * `NeuralNetwork` - The neural network class
   * `predict(input_array)` - Returns the output of a neural network
   * `train(input_array, target_array)` - Trains a neural network
