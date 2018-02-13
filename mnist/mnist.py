@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python3
-import matplotlib.pyplot as plt
+#!/usr/bin/env python
 import numpy as np
 import struct
 
