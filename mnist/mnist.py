@@ -38,10 +38,6 @@ def loadMNIST(dataset, callback):
 
     callback()
 
-def show(image):
-    #Render a given numpy.uint8 2D array of pixel data.
-    plt.imshow(image, interpolation='nearest', cmap=plt.cm.gray_r)
-    plt.show()
 
 # training_data = list(loadMNIST('training', lambda: print("Done")))
 # print(len(training_data))
