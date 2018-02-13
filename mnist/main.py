@@ -29,7 +29,7 @@ def getOutput(label):
 
 # Loading mnist training data and testing data
 training_data = list(loadMNIST('training', lambda: print("training dataset loaded without errors")))
-testing_data = list(loadMNIST('testing', lambda: print("training dataset loaded without errors\n")))
+testing_data = list(loadMNIST('testing', lambda: print("testing dataset loaded without errors\n")))
 
 # Number of pixels | Number of Hidden Nodes | Number of outputs | learning_rate
 nn = NeuralNetwork(784, 64, 10, learning_rate=0.1, activation_function=sigmoid)
