@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Examples
+mnist
+xor
+pendulum
+
 # Distribution / packaging
 .Python
 env/
