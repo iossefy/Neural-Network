@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 import random
-
+import pickle
 
 class Matrix:
     def __init__(self, rows, cols):
@@ -125,3 +125,13 @@ class Matrix:
 
     def log(self):
         print(self.data)
+
+    def serialize(self, fname):
+        pickle.dump(self, open(fname+'.weights', 'wb'))
+
+    @staticmethod
+    def deserialize(data):
+        data = pickle.load(open(data+'.weights', 'rb'))
+        matrix = Matrix(data.rows, data.cols)
+        matrix.data = data.data
+        return matrix
