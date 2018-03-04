@@ -5,7 +5,19 @@ except ImportError as e:
     from matrix import Matrix
 
 import math
+import pickle
 
+def Sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+
+def dSigmoid(y):
+    return y * (1 - y)
+
+def Tanh(x):
+    return math.tanh(x)
+
+def dTanh(y):
+    return 1 - (y * y)
 
 class ActivationFunction(object):
     def __init__(self, func, dfunc):
@@ -13,14 +25,14 @@ class ActivationFunction(object):
         self.dfunc = dfunc
 
 tanh = ActivationFunction(
-    lambda x: math.tanh(x),
-    lambda y: 1 - (y * y)
+    Tanh,
+    dTanh
 )
 
 
 sigmoid = ActivationFunction(
-    lambda x: 1 / (1 + math.exp(-x)),
-    lambda y: y * (1 - y)
+    Sigmoid,
+    dSigmoid
 )
 
 class NeuralNetwork:
@@ -116,3 +128,22 @@ class NeuralNetwork:
         self.weights_ih.add(weight_ih_deltas)
         # Adjust bias by its deltas
         self.bias_h.add(hidden_gradient)
+
+    def serialize(self, fname):
+        pickle.dump(self, open(fname+'.weights', 'wb'))
+
+    @staticmethod
+    def deserialize(data):
+        data = pickle.load(open(data+'.weights', 'rb'))
+        nn = NeuralNetwork(data.input_nodes,
+                           data.hidden_nodes,
+                           data.output_nodes,
+                           learning_rate=data.learning_rate,
+                           activation_function=data.activation_function)
+        
+        nn.weights_ih    = data.weights_ih
+        nn.weights_ho    = data.weights_ho
+        nn.bias_h        = data.bias_h
+        nn.bias_o        = data.bias_o
+        
+        return nn
