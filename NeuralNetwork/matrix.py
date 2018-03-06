@@ -3,6 +3,10 @@ import math
 import random
 import pickle
 
+def Vector(rows):
+    cols = 1
+    return Matrix(rows, cols)
+
 class Matrix:
     def __init__(self, rows, cols):
         # The user will input the number
@@ -124,7 +128,33 @@ class Matrix:
                     self.data[i][j] = math.floor(random.random() * 10)
 
     def log(self):
+        print(f"{self.rows} X {self.cols} Matrix:")
         print(self.data)
+
+#        print("{0} X {1} Matrix:".format(self.rows, self.cols))
+#        print(" __", end='')
+#        
+#        for j in range(16*self.cols-1):
+#            print(' ', end='')
+#        
+#        print("__ ")
+#        print("|  ", end='')
+#
+#        for j in range(16*self.cols-1):
+#            print(" ", end='')
+#        
+#        print("  |")
+#
+#        for i in range(self.rows):
+#            print("|  ", end='')
+#            for j in range(self.cols):
+#                print(f'{self.data[i][j]} ', end='')
+#            print(" |")
+#        print("|__", end='')
+#
+#        for j in range(16*self.cols-1):
+#            print(" ", end='')
+#        print("__|")
 
     def serialize(self, fname):
         pickle.dump(self, open(fname+'.weights', 'wb'))
