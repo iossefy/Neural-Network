@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 try:
-    from .matrix import Matrix
+    from .matrix import Matrix, Vector
 except ImportError as e:
-    from matrix import Matrix
+    from matrix import Matrix, Vector
 
 import math
 import pickle
@@ -48,8 +48,8 @@ class NeuralNetwork:
         self.weights_ih.randomize()
         self.weights_ho.randomize()
 
-        self.bias_h = Matrix(self.hidden_nodes, 1)
-        self.bias_o = Matrix(self.output_nodes, 1)
+        self.bias_h = Vector(self.hidden_nodes)
+        self.bias_o = Vector(self.output_nodes)
         self.bias_h.randomize()
         self.bias_o.randomize()
 
