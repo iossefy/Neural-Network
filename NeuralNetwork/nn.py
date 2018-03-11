@@ -6,6 +6,7 @@ except ImportError as e:
 
 import math
 import pickle
+import random
 
 def Sigmoid(x):
     return 1 / (1 + math.exp(-x))
@@ -136,3 +137,40 @@ class NeuralNetwork:
     def deserialize(data):
         data = pickle.load(open(data+'.nnet', 'rb'))       
         return data
+
+    def copy(self):
+        input_nodes     = self.input_nodes
+        hidden_nodes    = self.hidden_nodes
+        output_nodes    = self.output_nodes
+        weights_ih      = self.weights_ih.copy()
+        weights_ho      = self.weights_ho.copy()
+        bias_h          = self.bias_h.copy()
+        bias_o          = self.bias_o.copy()
+        lr              = self.learning_rate
+        activation      = self.activation_function
+
+        nn_cpy = NeuralNetwork(input_nodes,
+                               hidden_nodes,
+                               output_nodes,
+                               learning_rate=lr,
+                               activation_function=activation)
+        
+        nn_cpy.weights_ih = weights_ih
+        nn_cpy.weights_ho = weights_ho
+        nn_cpy.bias_h = bias_h
+        nn_cpy.bias_o = bias_o
+        
+        return nn_cpy
+    
+    def mutate(self, rate):
+        def mutate(val):
+            if random.random() < rate:
+                return random.random() * 1000 - 1
+            else:
+                return val
+
+        self.weights_ih.map(mutate)
+        self.weights_ho.map(mutate)
+        self.bias_h.map(mutate)
+        self.bias_o.map(mutate)
+

@@ -160,3 +160,10 @@ class Matrix:
     def deserialize(data):
         data = pickle.load(open(data+'.weights', 'rb'))
         return data
+
+    def copy(self):
+        m = Matrix(self.rows, self.cols)
+        for i in range(self.rows):
+            for j in range(self.cols):
+                m.data[i][j] = self.data[i][j]
+        return m
