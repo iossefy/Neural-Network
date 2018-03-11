@@ -130,20 +130,9 @@ class NeuralNetwork:
         self.bias_h.add(hidden_gradient)
 
     def serialize(self, fname):
-        pickle.dump(self, open(fname+'.weights', 'wb'))
+        pickle.dump(self, open(fname+'.nnet', 'wb'))
 
     @staticmethod
     def deserialize(data):
-        data = pickle.load(open(data+'.weights', 'rb'))
-        nn = NeuralNetwork(data.input_nodes,
-                           data.hidden_nodes,
-                           data.output_nodes,
-                           learning_rate=data.learning_rate,
-                           activation_function=data.activation_function)
-        
-        nn.weights_ih    = data.weights_ih
-        nn.weights_ho    = data.weights_ho
-        nn.bias_h        = data.bias_h
-        nn.bias_o        = data.bias_o
-        
-        return nn
+        data = pickle.load(open(data+'.nnet', 'rb'))       
+        return data

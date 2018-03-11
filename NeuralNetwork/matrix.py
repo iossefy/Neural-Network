@@ -9,9 +9,6 @@ def Vector(rows):
 
 class Matrix:
     def __init__(self, rows, cols):
-        # The user will input the number
-        # of rows and cols to create a matrix
-        # and store it to a variable
         super(Matrix, self).__init__()
         self.rows = rows
         self.cols = cols
@@ -162,6 +159,4 @@ class Matrix:
     @staticmethod
     def deserialize(data):
         data = pickle.load(open(data+'.weights', 'rb'))
-        matrix = Matrix(data.rows, data.cols)
-        matrix.data = data.data
-        return matrix
+        return data
