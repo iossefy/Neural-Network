@@ -20,11 +20,7 @@ class Matrix:
                 self.data[i].append(0)
 
     def __str__(self):
-        data = []
-        for i in range(self.rows):
-            for j in range(self.cols):
-                data.append(self.data[i][j])
-        return f"Matrix: {self.rows} X {self.cols}\ndata: {data}"
+        return f"Matrix: {self.rows} X {self.cols}\ndata: {self.data}"
 
     @staticmethod
     def subtract(a, b):
