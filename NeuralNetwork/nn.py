@@ -82,6 +82,20 @@ class NeuralNetwork:
     def setActivationFunction(self, func):
         self.activation_function = func
 
+    def __str__(self):# Now you can print this class
+        return f"""input_nodes: {self.input_nodes}
+hidden_nodes: {self.hidden_nodes}
+output_nodes: {self.output_nodes}
+
+learning_rate: {self.learning_rate}
+activation func: {self.activation_function}
+
+hidden bias: {self.bias_h}
+output bias: {self.bias_o}
+
+input->hidden weights: {self.weights_ih}
+hidden->output weights: {self.weights_ho}"""
+
     def train(self, input_array, target_array):
         # Generate hidden outputs
         inputs = Matrix.fromArray(input_array)
@@ -135,7 +149,7 @@ class NeuralNetwork:
 
     @staticmethod
     def deserialize(data):
-        data = pickle.load(open(data+'.nnet', 'rb'))       
+        data = pickle.load(open(data+'.nnet', 'rb'))
         return data
 
     def copy(self):
@@ -154,14 +168,14 @@ class NeuralNetwork:
                                output_nodes,
                                learning_rate=lr,
                                activation_function=activation)
-        
+
         nn_cpy.weights_ih = weights_ih
         nn_cpy.weights_ho = weights_ho
         nn_cpy.bias_h = bias_h
         nn_cpy.bias_o = bias_o
-        
+
         return nn_cpy
-    
+
     def mutate(self, rate):
         def mutate(val):
             if random.random() < rate:

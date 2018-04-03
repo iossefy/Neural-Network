@@ -19,6 +19,13 @@ class Matrix:
             for j in range(self.cols):
                 self.data[i].append(0)
 
+    def __str__(self):
+        data = []
+        for i in range(self.rows):
+            for j in range(self.cols):
+                data.append(self.data[i][j])
+        return f"Matrix: {self.rows} X {self.cols}\ndata: {data}"
+
     @staticmethod
     def subtract(a, b):
         # Return a new matrix a-b
@@ -123,35 +130,6 @@ class Matrix:
                 elif dtype == int:
                     # Return a int value between 0 and 10
                     self.data[i][j] = math.floor(random.random() * 10)
-
-    def log(self):
-        print(f"{self.rows} X {self.cols} Matrix:")
-        print(self.data)
-
-#        print("{0} X {1} Matrix:".format(self.rows, self.cols))
-#        print(" __", end='')
-#        
-#        for j in range(16*self.cols-1):
-#            print(' ', end='')
-#        
-#        print("__ ")
-#        print("|  ", end='')
-#
-#        for j in range(16*self.cols-1):
-#            print(" ", end='')
-#        
-#        print("  |")
-#
-#        for i in range(self.rows):
-#            print("|  ", end='')
-#            for j in range(self.cols):
-#                print(f'{self.data[i][j]} ', end='')
-#            print(" |")
-#        print("|__", end='')
-#
-#        for j in range(16*self.cols-1):
-#            print(" ", end='')
-#        print("__|")
 
     def serialize(self, fname):
         pickle.dump(self, open(fname+'.weights', 'wb'))
