@@ -90,11 +90,11 @@ output_nodes: {self.output_nodes}
 learning_rate: {self.learning_rate}
 activation func: {self.activation_function}
 
-hidden bias: {self.bias_h}
-output bias: {self.bias_o}
+hidden bias: {self.bias_h.data}
+output bias: {self.bias_o.data}
 
-input->hidden weights: {self.weights_ih}
-hidden->output weights: {self.weights_ho}"""
+input->hidden weights: {self.weights_ih.data}
+hidden->output weights: {self.weights_ho.data}"""
 
     def train(self, input_array, target_array):
         # Generate hidden outputs
@@ -187,4 +187,3 @@ hidden->output weights: {self.weights_ho}"""
         self.weights_ho.map(mutate)
         self.bias_h.map(mutate)
         self.bias_o.map(mutate)
-
